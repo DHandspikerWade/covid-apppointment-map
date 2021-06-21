@@ -145,6 +145,7 @@ foreach ($raw_appointments as $raw) {
 		'location' => geocodeAddress($raw['gisLocationString']),
 		'slots' => [],
 		'type' => [],
+		'flags' => [],
 	];
 
 	$search_label = strtolower($appointment['name']);
@@ -160,6 +161,10 @@ foreach ($raw_appointments as $raw) {
 
 	if (count($appointment['type']) < 1) {
 		$appointment['type'][] = 'Unknown';
+	}
+
+	if (strpos(strtolower($appointment['name']), 'dose 2') !== false) {
+		$appointment['flags'][] = '2nd';
 	}
 
 
