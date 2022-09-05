@@ -19,6 +19,13 @@ steps:
     - master
 - name: Deploy
   image: handspiker2/ci-tools:latest
+  environment:
+    SSH_PRIVATE: $SSH_PRIVATE
+    IMAGE_NAME: $IMAGE_NAME
+    DEPLOY_HOST: $DEPLOY_HOST
+    DEPLOY_USER: $DEPLOY_USER
+    CONTAINER_NAME: $CONTAINER_NAME
+
   commands:
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - mkdir -p ~/.ssh
