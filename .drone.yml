@@ -11,7 +11,7 @@ steps:
     password: 
       from_secret: DOCKER_PASSWORD
     repo:  
-      from_secret: CONTAINER_NAME
+      from_secret: IMAGE_NAME
     tags: latest
     dry_run: false
   when:
@@ -30,8 +30,8 @@ steps:
     - run_command='docker run -td --restart unless-stopped --network proxy -l traefik.frontend.entryPoints=https,http -l traefik.enable=true -l traefik.frontend.rule="Host:clinic-map.spikedhand.com" -l traefik.docker.network=proxy -v /apps/covid-map/location_cache.json:/app/location_cache.json -v /apps/covid-map/www/appointments.json:/app/www/appointments.json'
     - |
         cat <<EOF | ssh ${DEPLOY_USER}@${DEPLOY_HOST}
-        docker pull handspiker2/temp-clinic-map
-        $run_command --name temp_${CONTAINER_NAME} handspiker2/temp-clinic-map
+        docker pull ${IMAGE_NAME}
+        $run_command --name temp_${CONTAINER_NAME} ${IMAGE_NAME}
         ( docker stop ${CONTAINER_NAME} && docker rm ${CONTAINER_NAME} ) || true
-        $run_command --name ${CONTAINER_NAME} handspiker2/temp-clinic-map
+        $run_command --name ${CONTAINER_NAME} ${IMAGE_NAME}
         ( docker stop temp_${CONTAINER_NAME} && docker rm temp_${CONTAINER_NAME} ) || true
